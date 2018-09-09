@@ -18,8 +18,8 @@ public class Recipe {
     private String url;
     private String directions;
 
-    //TODO
-    // private Difficulty difficulty
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
 
     @Lob
     private Byte[] image;
@@ -126,6 +126,15 @@ public class Recipe {
 
     public Recipe setIngredients(Set<Ingredient> ingredients) {
         this.ingredients = ingredients;
+        return this;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public Recipe setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
         return this;
     }
 }
