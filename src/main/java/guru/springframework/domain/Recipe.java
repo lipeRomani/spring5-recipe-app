@@ -1,6 +1,7 @@
 package guru.springframework.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,12 +11,14 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String descrition;
+    private String description;
     private Integer prepTime;
     private Integer cookTime;
     private Integer servings;
     private String source;
     private String url;
+
+    @Lob
     private String directions;
 
     @Enumerated(EnumType.STRING)
@@ -28,7 +31,15 @@ public class Recipe {
     private Notes notes;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
-    private Set<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "recipe_category",
+            joinColumns = @JoinColumn(name =  "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -39,12 +50,12 @@ public class Recipe {
         return this;
     }
 
-    public String getDescrition() {
-        return descrition;
+    public String getDescription() {
+        return description;
     }
 
-    public Recipe setDescrition(String descrition) {
-        this.descrition = descrition;
+    public Recipe setDescription(String descrition) {
+        this.description = descrition;
         return this;
     }
 
@@ -135,6 +146,15 @@ public class Recipe {
 
     public Recipe setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+        return this;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public Recipe setCategories(Set<Category> categories) {
+        this.categories = categories;
         return this;
     }
 }
